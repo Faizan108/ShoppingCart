@@ -1,0 +1,67 @@
+package com.practice.ShoppingCart.service.Cart;
+
+import com.practice.ShoppingCart.dto.CartDto;
+import com.practice.ShoppingCart.dto.CartItemDto;
+import com.practice.ShoppingCart.dto.ProductDto;
+import com.practice.ShoppingCart.model.CartItem;
+import com.practice.ShoppingCart.model.Product;
+import com.practice.ShoppingCart.repository.CartRepository;
+import com.practice.ShoppingCart.exception.ResourceNotFoundException;
+import com.practice.ShoppingCart.model.Cart;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
+
+@Service
+@RequiredArgsConstructor
+public class CartService implements ICartService {
+
+    private final CartRepository cartRepository;
+    private final CartItemRepository cartItemRepository;
+    private final AtomicLong cartIdGenerator = new AtomicLong(0);
+    private final ModelMapper modelMapper;
+
+
+    @Override
+    public Cart getCart(Long id) {
+        Cart cart = cartRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("Cart not Found"));
+        BigDecimal totalAmount = cart.getTotalAmount();
+        cart.setTotalAmount(totalAmount);
+        return cartRepository.save(cart);
+    }
+
+    @Override
+    public void clearCart(Long id) {
+        Cart cart = getCart(id);
+        cartItemRepository.deleteAllByCartId(id);
+        cart.getItems().clear();
+        cartRepository.deleteById(id);
+
+    }
+
+    @Override
+    public BigDecimal getTotalPrice(Long id) {
+        Cart cart  = getCart(id);
+        return cart.getTotalAmount();
+    }
+
+    @Override
+    public Long initializeNewCart() {
+        Cart newCart = new Cart();
+//        Long newCartId = cartIdGenerator.incrementAndGet();
+//        newCart.setId(newCartId);
+        cartRepository.save(newCart);
+        return newCart.getId();
+    }
+
+    @Override
+    public Cart getCartByUserId(Long userId) {
+        return cartRepository.findByUserId(userId);
+    }
+
+}
