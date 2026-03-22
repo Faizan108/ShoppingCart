@@ -46,6 +46,7 @@ public class CartController {
         try {
             BigDecimal totalAmount = cartService.getTotalPrice(cartId);
             return ResponseEntity.ok(new ApiResponse("Success",totalAmount));
+            
         }catch (ResourceNotFoundException e){
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(),null));
         }
