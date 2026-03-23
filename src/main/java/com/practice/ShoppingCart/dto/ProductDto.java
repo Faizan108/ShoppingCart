@@ -24,4 +24,5 @@ public class ProductDto {
     private BigDecimal price;
     private Category category;
     private List<ImageDto> images;
+    
 }
