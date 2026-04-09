@@ -38,7 +38,7 @@ public class UserController {
         try{
             User user = userService.createUser(request);
             UserDto userDto = userService.getCovertedUserDto(user);
-            return ResponseEntity.ok(new ApiResponse("Success!",userDto));
+            return ResponseEntity.ok(new ApiResponse("User Created Successfully!",userDto));
         }catch(AlreadyExistException e){
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(new ApiResponse("User Already Exist!",e.getMessage()));
