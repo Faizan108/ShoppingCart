@@ -1,4 +1,4 @@
-package com.practice.ShoppingCart.config;
+package com.practice.ShoppingCart.security.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;

@@ -2,6 +2,7 @@ package com.practice.ShoppingCart.service.Cart;
 
 import com.practice.ShoppingCart.dto.CartDto;
 import com.practice.ShoppingCart.model.Cart;
+import com.practice.ShoppingCart.model.User;
 
 import java.math.BigDecimal;
 
@@ -12,7 +13,7 @@ public interface ICartService {
     BigDecimal getTotalPrice(Long id);
 
 
-    Long initializeNewCart();
+    Cart initializeNewCart(User user);
 
 
     Cart getCartByUserId(Long userId);

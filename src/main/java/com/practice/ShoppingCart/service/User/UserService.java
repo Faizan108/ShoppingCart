@@ -27,7 +27,7 @@ public class UserService implements IUserService{
     @Override
     public User createUser(CreateUserRequest request) {
         return Optional.of(request)
-                .filter(user ->!userRepository.findByEmail(request.getEmail()))
+                .filter(user ->!userRepository.existsByEmail(user.getEmail()))
                 .map(req->{
                     User user = new User();
                     user.setEmail(request.getEmail());

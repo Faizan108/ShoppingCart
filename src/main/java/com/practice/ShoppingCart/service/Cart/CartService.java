@@ -5,6 +5,7 @@ import com.practice.ShoppingCart.dto.CartItemDto;
 import com.practice.ShoppingCart.dto.ProductDto;
 import com.practice.ShoppingCart.model.CartItem;
 import com.practice.ShoppingCart.model.Product;
+import com.practice.ShoppingCart.model.User;
 import com.practice.ShoppingCart.repository.CartRepository;
 import com.practice.ShoppingCart.exception.ResourceNotFoundException;
 import com.practice.ShoppingCart.model.Cart;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Service
@@ -51,12 +53,13 @@ public class CartService implements ICartService {
     }
 
     @Override
-    public Long initializeNewCart() {
-        Cart newCart = new Cart();
-//        Long newCartId = cartIdGenerator.incrementAndGet();
-//        newCart.setId(newCartId);
-        cartRepository.save(newCart);
-        return newCart.getId();
+    public Cart initializeNewCart(User user) {
+            return Optional.ofNullable(getCartByUserId(user.getId()))
+                    .orElseGet(()->{
+                        Cart cart = new Cart();
+                        cart.setUser(user);
+                        return cartRepository.save(cart);
+                    });
     }
 
     @Override
